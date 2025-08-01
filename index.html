@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - Scaler Topics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Variables for Scaler's Color Palette */
+        :root {
+            --scaler-blue: #2a358c;
+            --scaler-dark-blue: #1c2560;
+            --scaler-text: #212121;
+            --scaler-text-light: #5f6368;
+            --scaler-green: #00b175;
+            --scaler-bg: #f7f8fa;
+            --scaler-border: #e0e0e0;
+            --white: #ffffff;
+            --shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0px 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        /* General Styles & Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--white);
+            color: var(--scaler-text);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Header & Navbar */
+        .main-header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--scaler-border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--scaler-dark-blue);
+            text-decoration: none;
+        }
+        .logo span {
+            font-weight: 500;
+            color: var(--scaler-text-light);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--scaler-text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--scaler-blue);
+        }
+        
+        .login-btn {
+            background-color: var(--scaler-blue);
+            color: var(--white);
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-btn:hover {
+            background-color: var(--scaler-dark-blue);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--scaler-dark-blue);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: var(--scaler-bg);
+            text-align: center;
+            padding: 4rem 0;
+        }
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--scaler-dark-blue);
+            margin-bottom: 1rem;
+        }
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--scaler-text-light);
+            max-width: 650px;
+            margin: 0 auto 2rem auto;
+            line-height: 1.6;
+        }
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: 8px;
+            border: 1px solid var(--scaler-border);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .search-input:focus {
+            border-color: var(--scaler-blue);
+            box-shadow: 0 0 0 3px rgba(42, 53, 140, 0.2);
+        }
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--scaler-text-light);
+        }
+
+        /* Courses Section */
+        .courses-section {
+            padding: 4rem 0;
+        }
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* Course Card */
+        .course-card {
+            background-color: var(--white);
+            border: 1px solid var(--scaler-border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: var(--scaler-text);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+        .card-image-container {
+            position: relative;
+        }
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .free-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--scaler-green);
+            color: var(--white);
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--scaler-text-light);
+            line-height: 1.5;
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+        .card-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        .card-features li {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .card-features .fa-check-circle {
+            color: var(--scaler-green);
+            margin-right: 0.5rem;
+        }
+        .card-footer {
+            margin-top: auto; /* Pushes footer to the bottom */
+            border-top: 1px solid var(--scaler-border);
+            padding-top: 1rem;
+            text-align: center;
+        }
+        .start-learning-btn {
+            color: var(--scaler-blue);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .course-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--white);
+                padding: 1rem 0;
+                box-shadow: var(--shadow);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                text-align: center;
+                padding: 1rem 0;
+            }
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container navbar">
+            <a href="#" class="logo">scaler<span>/topics</span></a>
+            <nav>
+                <ul class="nav-links" id="nav-menu">
+                    <li><a href="#">Courses</a></li>
+                    <li><a href="#">Free Masterclasses</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">Community</a></li>
+                </ul>
+            </nav>
+            <div>
+                <a href="login.html" class="login-btn">Login</a>
+                <i class="fas fa-bars menu-toggle" id="menu-toggle"></i>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container">
+                <h1 class="hero-title">Scaler Topics Courses</h1>
+                <p class="hero-subtitle">Free and beginner-friendly courses to learn the fundamentals of programming, data structures & algorithms, and web development.</p>
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search from 25+ courses">
+                </div>
+            </div>
+        </section>
+
+        <section class="courses-section">
+            <div class="container">
+                <div class="course-grid" id="courseGrid">
+                    
+                    <a href="python-details.html" class="course-card">
+                        <div class="card-image-container">
+                            <img src="https://picsum.photos/seed/python/600/400" alt="Python Course" class="card-image">
+                            <span class="free-badge">FREE</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Python for Beginners</h3>
+                            <p class="card-desc">Master the fundamentals of Python, the world's most popular programming language.</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> Beginner Friendly</li>
+                                <li><i class="fas fa-check-circle"></i> No prerequisites required</li>
+                                <li><i class="fas fa-check-circle"></i> 4.7 <i class="fas fa-star" style="color:#f1c40f;"></i> rating</li>
+                            </ul>
+                            <div class="card-footer">
+                                <span class="start-learning-btn">Start Learning <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="course-card">
+                        <div class="card-image-container">
+                            <img src="https://picsum.photos/seed/dsa/600/400" alt="DSA Course" class="card-image">
+                            <span class="free-badge">FREE</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Data Structures & Algorithms</h3>
+                            <p class="card-desc">Build a strong foundation in DSA, essential for cracking top tech interviews.</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> Intermediate Level</li>
+                                <li><i class="fas fa-check-circle"></i> Basic programming required</li>
+                                <li><i class="fas fa-check-circle"></i> 4.8 <i class="fas fa-star" style="color:#f1c40f;"></i> rating</li>
+                            </ul>
+                             <div class="card-footer">
+                                <span class="start-learning-btn">Start Learning <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="course-card">
+                        <div class="card-image-container">
+                            <img src="https://picsum.photos/seed/webdev/600/400" alt="Web Dev Course" class="card-image">
+                            <span class="free-badge">FREE</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Basics of Web Development</h3>
+                            <p class="card-desc">Learn HTML, CSS, and JavaScript from scratch to build modern, responsive websites.</p>
+                             <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> Beginner Friendly</li>
+                                <li><i class="fas fa-check-circle"></i> No prerequisites required</li>
+                                <li><i class="fas fa-check-circle"></i> 4.6 <i class="fas fa-star" style="color:#f1c40f;"></i> rating</li>
+                            </ul>
+                             <div class="card-footer">
+                                <span class="start-learning-btn">Start Learning <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="course-card">
+                        <div class="card-image-container">
+                            <img src="https://picsum.photos/seed/java/600/400" alt="Java Course" class="card-image">
+                            <span class="free-badge">FREE</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Introduction to Java</h3>
+                            <p class="card-desc">Understand core Java concepts required for backend and Android development.</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> Beginner Friendly</li>
+                                <li><i class="fas fa-check-circle"></i> No prerequisites required</li>
+                                <li><i class="fas fa-check-circle"></i> 4.5 <i class="fas fa-star" style="color:#f1c40f;"></i> rating</li>
+                            </ul>
+                             <div class="card-footer">
+                                <span class="start-learning-btn">Start Learning <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                     <a href="#" class="course-card">
+                        <div class="card-image-container">
+                            <img src="https://picsum.photos/seed/aptitude/600/400" alt="Aptitude Course" class="card-image">
+                            <span class="free-badge">FREE</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Quantitative Aptitude</h3>
+                            <p class="card-desc">Sharpen your quantitative and logical reasoning skills for placements and exams.</p>
+                             <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> All Levels</li>
+                                <li><i class="fas fa-check-circle"></i> Practice questions included</li>
+                                <li><i class="fas fa-check-circle"></i> 4.6 <i class="fas fa-star" style="color:#f1c40f;"></i> rating</li>
+                            </ul>
+                             <div class="card-footer">
+                                <span class="start-learning-btn">Start Learning <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                    
+                     <a href="#" class="course-card">
+                        <div class="card-image-container">
+                            <img src="https://picsum.photos/seed/sql/600/400" alt="SQL Course" class="card-image">
+                            <span class="free-badge">FREE</span>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">SQL for Data Science</h3>
+                            <p class="card-desc">Learn to manage and query relational databases, a must-have skill for data roles.</p>
+                             <ul class="card-features">
+                                <li><i class="fas fa-check-circle"></i> Beginner Friendly</li>
+                                <li><i class="fas fa-check-circle"></i> Hands-on exercises</li>
+                                <li><i class="fas fa-check-circle"></i> 4.7 <i class="fas fa-star" style="color:#f1c40f;"></i> rating</li>
+                            </ul>
+                             <div class="card-footer">
+                                <span class="start-learning-btn">Start Learning <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Mobile Menu Toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const navMenu = document.getElementById('nav-menu');
+
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+
+
+            // Live Search Functionality
+            const searchInput = document.getElementById('searchInput');
+            const courseGrid = document.getElementById('courseGrid');
+            const courseCards = courseGrid.getElementsByClassName('course-card');
+
+            searchInput.addEventListener('keyup', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+
+                Array.from(courseCards).forEach(card => {
+                    const title = card.querySelector('.card-title').textContent.toLowerCase();
+                    const description = card.querySelector('.card-desc').textContent.toLowerCase();
+
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

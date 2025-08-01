@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Scaler Topics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --scaler-blue: #2a358c;
+            --scaler-dark-blue: #1c2560;
+            --scaler-text: #212121;
+            --scaler-text-light: #5f6368;
+            --scaler-green: #00b175;
+            --scaler-bg: #f7f8fa;
+            --scaler-border: #e0e0e0;
+            --white: #ffffff;
+            --danger: #d93025;
+            --shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--scaler-bg);
+            color: var(--scaler-text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .main-header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--scaler-border);
+            padding: 1rem 0;
+        }
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--scaler-dark-blue);
+            text-decoration: none;
+            text-align: center;
+        }
+        .logo span {
+            font-weight: 500;
+            color: var(--scaler-text-light);
+        }
+
+        /* Login Form Container */
+        .login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 2rem 0;
+        }
+
+        .login-container {
+            background-color: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 2rem;
+            color: var(--scaler-dark-blue);
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border: 1px solid var(--scaler-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Manrope', sans-serif;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: var(--scaler-blue);
+            box-shadow: 0 0 0 3px rgba(42, 53, 140, 0.2);
+        }
+
+        #signin-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--scaler-blue);
+            border: none;
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #signin-btn:hover {
+            background-color: var(--scaler-dark-blue);
+        }
+        #signin-btn:disabled {
+            background-color: #a9b0d3;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            min-height: 20px;
+        }
+        .error { color: var(--danger); }
+        .success { color: var(--scaler-green); }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer-note {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--scaler-text-light);
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <a href="index.html" class="logo">scaler<span>/topics</span></a>
+    </header>
+
+    <main class="login-section">
+        <div class="login-container">
+            <h2>Welcome Back!</h2>
+            <input type="email" id="email" class="input-field" placeholder="Enter your email" required>
+            <input type="password" id="password" class="input-field" placeholder="Enter your password" required>
+            
+            <button id="signin-btn">
+                <span id="btn-text">Sign In</span>
+                <span id="loading" class="loading-spinner" style="display: none;"></span>
+            </button>
+            
+            <p class="message" id="message"></p>
+            <p class="footer-note">This login is for Prime Users only.</p>
+        </div>
+    </main>
+
+    <script type="module">
+        // Import the functions you need from the Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDSapc498-GErIIKRcOss5bTJwn0kCPS8g",
+            authDomain: "elearning-92515.firebaseapp.com",
+            projectId: "elearning-92515",
+            storageBucket: "elearning-92515.appspot.com",
+            messagingSenderId: "546172404816",
+            appId: "1:546172404816:web:cd6aa52f94671eb7d47d55",
+            measurementId: "G-0VZPB6BWYQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // DOM Elements
+        const signInBtn = document.getElementById('signin-btn');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const message = document.getElementById('message');
+        const btnText = document.getElementById('btn-text');
+        const loadingSpinner = document.getElementById('loading');
+
+        // Sign-In Functionality
+        const handleSignIn = () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            // Validate inputs
+            if (!email || !password) {
+                message.textContent = "Please fill in all fields.";
+                message.className = "message error";
+                return;
+            }
+            message.textContent = ""; // Clear previous messages
+
+            // Show loading spinner
+            btnText.style.display = 'none';
+            loadingSpinner.style.display = "inline-block";
+            signInBtn.disabled = true;
+            emailInput.disabled = true;
+            passwordInput.disabled = true;
+
+            // Sign in with email and password
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in successfully
+                    const user = userCredential.user;
+                    message.textContent = "Sign in successful! Redirecting...";
+                    message.className = "message success";
+                    
+                    // Redirect to the main page after successful sign-in
+                    setTimeout(() => {
+                        window.location.href = "index.html"; // Redirects to the main courses page
+                    }, 1500);
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    let errorMessage = "An error occurred. Please try again.";
+
+                    if (errorCode === "auth/invalid-email" || errorCode === "auth/invalid-credential") {
+                        errorMessage = "Invalid email or password.";
+                    } else if (errorCode === "auth/user-not-found") {
+                        errorMessage = "No account found with this email.";
+                    } else if (errorCode === "auth/wrong-password") {
+                        errorMessage = "Incorrect password.";
+                    }
+
+                    message.textContent = errorMessage;
+                    message.className = "message error";
+
+                    // Reset button and loading spinner on error
+                    btnText.style.display = 'inline';
+                    loadingSpinner.style.display = "none";
+                    signInBtn.disabled = false;
+                    emailInput.disabled = false;
+                    passwordInput.disabled = false;
+                });
+        };
+
+        signInBtn.addEventListener('click', handleSignIn);
+        // Allow pressing Enter to sign in
+        passwordInput.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                handleSignIn();
+            }
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Learning Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Sidebar Features List - Modern UI */
+        .sidebar-features {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+        }
+        .sidebar-features li {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(90deg, var(--scaler-bg) 80%, #e6f9f3 100%);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1.05rem;
+            color: var(--scaler-dark-blue);
+            box-shadow: 0 2px 8px rgba(44, 183, 125, 0.06);
+            border: none;
+            transition: background 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .sidebar-features li i {
+            color: var(--scaler-green);
+            margin-right: 0.9rem;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            background: #e6f9f3;
+            border-radius: 50%;
+            padding: 0.3rem;
+            box-shadow: 0 1px 4px rgba(0,177,117,0.07);
+        }
+        .sidebar-features li:hover {
+            background: linear-gradient(90deg, #e6f9f3 60%, var(--scaler-bg) 100%);
+            box-shadow: 0 4px 16px rgba(44, 183, 125, 0.13);
+        }
+        .sidebar-features li::before {
+            content: "";
+            display: none;
+        }
+        @media (max-width: 992px) {
+            .sidebar-features {
+                gap: 0.6rem;
+            }
+            .sidebar-features li {
+                font-size: 1rem;
+                padding: 0.6rem 0.8rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .sidebar-features li {
+                font-size: 0.95rem;
+                padding: 0.5rem 0.6rem;
+            }
+        }
+        /* CSS Variables & Global Styles */
+        :root {
+            --scaler-blue: #2a358c;
+            --scaler-dark-blue: #1c2560;
+            --scaler-text: #212121;
+            --scaler-text-light: #5f6368;
+            --scaler-green: #00b175;
+            --scaler-bg: #f7f8fa;
+            --scaler-border: #e0e0e0;
+            --white: #ffffff;
+            --danger: #d93025;
+            --shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Manrope', sans-serif; background-color: var(--scaler-bg); color: var(--scaler-text); }
+        .container { width: 90%; max-width: 1280px; margin: 0 auto; }
+
+        /* Page Management */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Shared Header */
+        .main-header { background-color: var(--white); border-bottom: 1px solid var(--scaler-border); padding: 1rem 0; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.75rem; font-weight: 800; color: var(--scaler-dark-blue); text-decoration: none; }
+        .logo span { font-weight: 500; color: var(--scaler-text-light); }
+        .header-btn { background-color: var(--scaler-blue); color: var(--white); padding: 0.7rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; }
+
+        /* General Page Content Styles */
+        .page-content { padding: 3rem 0; }
+        .section-heading { font-size: 1.8rem; font-weight: 700; color: var(--scaler-dark-blue); border-bottom: 2px solid var(--scaler-bg); padding-bottom: 1rem; margin-bottom: 1.5rem; margin-top: 2.5rem; }
+        .start-learning-btn { background-color: var(--scaler-green); color: var(--white); padding: 1rem 2rem; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease; width: 100%; margin-bottom: 2.5rem; }
+        .start-learning-btn:hover { background-color: #009a65; }
+        
+        /* 1. Course Details Page Styles */
+        #course-details-page .course-layout { display: flex; gap: 2rem; align-items: flex-start; }
+        #course-details-page .main-content { flex: 3; }
+        #course-details-page .sidebar { flex: 1; position: sticky; top: 30px; }
+        #course-details-page .course-title { font-size: 2.5rem; font-weight: 800; color: var(--scaler-dark-blue); margin-bottom: 1rem; }
+        #course-details-page .course-desc { font-size: 1.1rem; color: var(--scaler-text-light); line-height: 1.7; margin-bottom: 2rem; }
+        
+        /* NEW: Course Stats Section */
+        .course-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; background-color: var(--white); border: 1px solid var(--scaler-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2.5rem; }
+        .stat-item { text-align: center; }
+        .stat-item .icon { font-size: 1.5rem; color: var(--scaler-blue); margin-bottom: 0.5rem; }
+        .stat-item h3 { font-size: 1.2rem; font-weight: 700; color: var(--scaler-dark-blue); }
+        .stat-item p { font-size: 0.9rem; color: var(--scaler-text-light); }
+
+        /* Accordion Styles */
+        #course-details-page .accordion-item { border: 1px solid var(--scaler-border); border-radius: 8px; margin-bottom: 1rem; background: var(--white); }
+        #course-details-page .accordion-header { padding: 1rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        #course-details-page .accordion-header h4 { font-size: 1.1rem; font-weight: 600; }
+        #course-details-page .accordion-content { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
+        #course-details-page .accordion-content.active { max-height: 500px; padding: 1.5rem; }
+        #course-details-page .accordion-content ul { list-style: none; }
+        #course-details-page .accordion-content li { padding: 0.5rem 0; display: flex; align-items: center; color: var(--scaler-text-light); }
+        #course-details-page .accordion-content li i { color: var(--scaler-blue); margin-right: 1rem; }
+
+        /* NEW: Learning Outcomes Section */
+        .learning-outcomes ul { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .learning-outcomes li { background: var(--white); padding: 1rem; border: 1px solid var(--scaler-border); border-radius: 8px; display: flex; align-items: center; }
+        .learning-outcomes li i { color: var(--scaler-green); margin-right: 1rem; font-size: 1.2rem; }
+
+        /* Sidebar Styles */
+        #course-details-page .sidebar-card { border: 1px solid var(--scaler-border); border-radius: 12px; overflow: hidden; background: var(--white); }
+        #course-details-page .sidebar-card img { width: 100%; display: block; }
+        #course-details-page .sidebar-content { padding: 1.5rem; }
+        #course-details-page .sidebar-content h3 { margin-bottom: 1rem; font-size: 1.2rem; }
+        #course-details-page .sidebar-content ul { list-style: none; margin-bottom: 1.5rem; }
+        #course-details-page .sidebar-content li { margin-bottom: 0.75rem; color: var(--scaler-text-light); }
+        #course-details-page .sidebar-content li i { color: var(--scaler-green); margin-right: 0.75rem; }
+
+        /* 2. Login Page Styles */
+        #login-page .login-section { display: flex; justify-content: center; align-items: center; padding: 5rem 0; }
+        #login-page .login-container { background-color: var(--white); padding: 2.5rem; border-radius: 12px; box-shadow: var(--shadow); width: 100%; max-width: 400px; text-align: center; }
+        #login-page .login-container h2 { margin-bottom: 2rem; color: var(--scaler-dark-blue); font-size: 1.8rem; font-weight: 800; }
+        #login-page .input-field { width: 100%; padding: 1rem; margin: 0.75rem 0; border: 1px solid var(--scaler-border); border-radius: 8px; font-size: 1rem; font-family: 'Manrope', sans-serif; }
+        #login-page #signin-btn { width: 100%; padding: 1rem; background-color: var(--scaler-blue); border: none; border-radius: 8px; color: var(--white); font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        #login-page #signin-btn:disabled { background-color: #a9b0d3; cursor: not-allowed; }
+        #login-page .message { margin-top: 1.5rem; font-size: 0.9rem; font-weight: 500; min-height: 20px; }
+        #login-page .error { color: var(--danger); }
+        #login-page .success { color: var(--scaler-green); }
+        #login-page .loading-spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(255, 255, 255, 0.3); border-top-color: var(--white); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 3. Video Content Page Styles */
+        #video-content-page .video-player-container { position: relative; padding-bottom: 56.25%; height: 0; background-color: #000; border-radius: 12px; overflow: hidden; }
+        #video-content-page .video-player-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        #video-content-page .info-container { margin-top: 2rem; background-color: var(--white); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--scaler-border); }
+        #video-content-page .tab-buttons { display: flex; border-bottom: 2px solid var(--scaler-border); margin-bottom: 1.5rem; }
+        #video-content-page .tab-btn { padding: 0.8rem 1.5rem; cursor: pointer; border: none; background: none; font-size: 1.1rem; font-weight: 600; color: var(--scaler-text-light); position: relative; }
+        #video-content-page .tab-btn.active { color: var(--scaler-blue); }
+        #video-content-page .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background-color: var(--scaler-blue); }
+        #video-content-page .tab-content { display: none; line-height: 1.7; }
+        #video-content-page .tab-content.active { display: block; }
+        #video-content-page #notes-textarea { width: 100%; min-height: 250px; padding: 1rem; border: 1px solid var(--scaler-border); border-radius: 8px; font-size: 1rem; line-height: 1.6; resize: vertical; }
+        #video-content-page #save-status { margin-top: 10px; font-style: italic; color: var(--scaler-text-light); font-size: 0.9rem; }
+        #video-content-page .download-list { list-style-type: none; }
+        #video-content-page .download-list li { padding: 0.8rem 0; border-bottom: 1px solid var(--scaler-bg); }
+        #video-content-page .download-list a { text-decoration: none; color: var(--scaler-blue); font-weight: 500; }
+        #video-content-page .download-list a i { margin-right: 10px; }
+
+        /* Responsive */
+        @media(max-width: 992px){
+            #course-details-page .course-layout { flex-direction: column; }
+            #course-details-page .sidebar { position: static; width: 100%; margin-top: 2rem; }
+            .course-stats { grid-template-columns: repeat(2, 1fr); }
+            .learning-outcomes ul { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="course-details-page" class="page active">
+        <header class="main-header">
+            <div class="container navbar">
+                <a href="#" class="logo">Python<span>/Hub</span></a>
+                <button class="header-btn" data-navigate="login-page">Login</button>
+            </div>
+        </header>
+        <div class="page-content">
+            <div class="container course-layout">
+                <div class="main-content">
+                    <h1 class="course-title">Python For Beginners</h1>
+                    <p class="course-desc">Kickstart your programming journey with Python, one of the most versatile and in-demand languages. This course is designed for absolute beginners, taking you from zero to a confident programmer, ready to build applications and solve problems.</p>
+                    <button class="start-learning-btn" id="startLearningBtn">Start learning with videos <i class="fas fa-play-circle"></i></button>
+                    
+                    <div class="course-stats" style="background: linear-gradient(90deg, #e6f9f3 60%, #f7f8fa 100%); box-shadow: 0 4px 24px rgba(44,183,125,0.10); border: none;">
+                        <div class="stat-item">
+                            <div class="icon"><i class="fas fa-clock"></i></div>
+                            <h3>9h 44m</h3>
+                            <p>Duration</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="icon"><i class="fas fa-puzzle-piece"></i></div>
+                            <h3>10</h3>
+                            <p>Challenges</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="icon"><i class="fas fa-signal"></i></div>
+                            <h3>Beginner</h3>
+                            <p>Course Level</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="icon"><i class="fas fa-certificate"></i></div>
+                            <h3>Included</h3>
+                            <p>Certificate</p>
+                        </div>
+                    </div>
+                    
+                    <h2 class="section-heading">Python Learning Roadmap</h2>
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <h4>
+                                    <span style="display: inline-flex; align-items: center; gap: 0.7rem;">
+                                        <i class="fab fa-python" style="color: #306998; font-size: 1.5rem;"></i>
+                                        Module 1: Python Basics <span style="font-size: 1rem; color: var(--scaler-text-light); font-weight: 500;">(1h 30m)</span>
+                                    </span>
+                                </h4>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <ul>
+                                    <li>
+                                        <i class="fas fa-lightbulb" style="color: #FFD43B;"></i>
+                                        What is Python &amp; Why Learn It?
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-terminal" style="color: #2a358c;"></i>
+                                        Syntax, Variables &amp; Data Types
+                                    </li>
+                                </ul>
+                            </div>
+                        </div></span>
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <h4>
+                                    <span style="display: inline-flex; align-items: center; gap: 0.7rem;">
+                                        <i class="fas fa-code-branch" style="color: #2a358c; font-size: 1.5rem;"></i>
+                                        Module 2: Control Flow <span style="font-size: 1rem; color: var(--scaler-text-light); font-weight: 500;">(2h 15m)</span>
+                                    </span>
+                                </h4>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <ul>
+                                    <li>
+                                        <i class="fas fa-code-branch"></i>
+                                        Conditional Statements (If-Else)
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-sync-alt"></i>
+                                        Loops (For, While)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <h4>
+                                    <span style="display: inline-flex; align-items: center; gap: 0.7rem;">
+                                        <i class="fas fa-cogs" style="color: #00b175; font-size: 1.5rem;"></i>
+                                        Module 3: Functions & Modules <span style="font-size: 1rem; color: var(--scaler-text-light); font-weight: 500;">(2h 0m)</span>
+                                    </span>
+                                </h4>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <ul>
+                                    <li>
+                                        <i class="fas fa-cogs"></i>
+                                        Creating and Calling Functions
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-book"></i>
+                                        Importing and Using Modules
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <h4>
+                                    <span style="display: inline-flex; align-items: center; gap: 0.7rem;">
+                                        <i class="fas fa-project-diagram" style="color: #2a358c; font-size: 1.5rem;"></i>
+                                        Module 4: Object-Oriented Programming <span style="font-size: 1rem; color: var(--scaler-text-light); font-weight: 500;">(2h 30m)</span>
+                                    </span>
+                                </h4>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <ul>
+                                    <li>
+                                        <i class="fas fa-project-diagram"></i>
+                                        Classes and Objects
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-dna"></i>
+                                        Inheritance and Polymorphism
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <h4>
+                                    <span style="display: inline-flex; align-items: center; gap: 0.7rem;">
+                                        <i class="fas fa-file-alt" style="color: #FFD43B; font-size: 1.5rem;"></i>
+                                        Module 5: File & Exception Handling <span style="font-size: 1rem; color: var(--scaler-text-light); font-weight: 500;">(1h 29m)</span>
+                                    </span>
+                                </h4>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <ul>
+                                    <li>
+                                        <i class="fas fa-file-alt"></i>
+                                        Reading from and Writing to Files
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        Handling Errors with Try-Except
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-heading">What you’ll learn</h2>
+                    <p class="course-desc" style="margin-bottom: 1.5rem; font-size: 1rem;">The skills that you would learn after taking up this Python Course for Beginners With Certification are:</p>
+                    <div class="learning-outcomes">
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Python installation and setup</li>
+                            <li><i class="fas fa-check-circle"></i> Basic Python syntax and data types</li>
+                            <li><i class="fas fa-check-circle"></i> Control flow and loops</li>
+                            <li><i class="fas fa-check-circle"></i> String manipulation and list handling</li>
+                            <li><i class="fas fa-check-circle"></i> Working with tuples, dictionaries, and sets</li>
+                            <li><i class="fas fa-check-circle"></i> Defining and using functions</li>
+                            <li><i class="fas fa-check-circle"></i> Object-oriented programming concepts</li>
+                            <li><i class="fas fa-check-circle"></i> File handling and error & exception handling</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="sidebar">
+                    <div class="sidebar-card" style="box-shadow: 0 4px 16px rgba(44,183,125,0.08); border-radius: 16px;">
+                        <img src="https://picsum.photos/seed/python/600/350" alt="Python course thumbnail">
+                        <div class="sidebar-content">
+                      
+                            <h3>Key Features of this course</h3>
+                            <ul class="sidebar-features"></ul>
+                                <li><i class="fas fa-check-circle"></i> Learn from top industry experts</li>
+                                <li><i class="fas fa-check-circle"></i> Learn at your own pace</li>
+                                <li><i class="fas fa-check-circle"></i> Unlimited access forever</li>
+                                <li><i class="fas fa-check-circle"></i> Certification Included</li>
+                                <li><i class="fas fa-check-circle"></i> View Sample Certificate</li>
+                            </ul>
+                            
+                            <!-- <h3>This course includes:</h3>
+                            <ul>
+                                <li><i class="fas fa-video"></i> 50+ Video Lessons</li>
+                                <li><i class="fas fa-code"></i> Hands-on Projects</li>
+                                <li><i class="fas fa-trophy"></i> Certificate of Completion</li>
+                            </ul> -->
+                            <button class="start-learning-btn" id="startLearningSidebarBtn">Start learning</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="main-footer" style="margin-top: 2rem; padding: 1.5rem 0; background-color: var(--scaler-bg); text-align: center; border-top: 1px solid var(--scaler-border);">
+            <div class="container">
+                <p style="color: var(--scaler-text-light); font-size: 0.9rem;">&copy; 2023 Python Learning Hub. All rights reserved.</p>
+                <p style="color: var(--scaler-text-light); font-size: 0.8rem;">Created with ❤️ by Your Name</p>
+            </div>
+        </footer>
+    </div>
+    
+    <div id="login-page" class="page">
+        <header class="main-header"><div class="container navbar"><a href="#" class="logo" data-navigate="course-details-page">Python<span>/Hub</span></a></div></header>
+        <main class="login-section">
+            <div class="login-container">
+                <h2>Welcome Back!</h2>
+                <input type="email" id="email" class="input-field" placeholder="Enter your email" required>
+                <input type="password" id="password" class="input-field" placeholder="Enter your password" required>
+                <button id="signin-btn"><span id="btn-text">Sign In</span><span id="loading" class="loading-spinner" style="display: none;"></span></button>
+                <p class="message" id="message"></p>
+                <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--scaler-text-light);">Use any B.Tech email and password to proceed.</p>
+            </div>
+        </main>
+    </div>
+
+    <div id="video-content-page" class="page">
+        <header class="main-header">
+            <div class="container navbar">
+                <a href="#" class="logo" data-navigate="course-details-page">Python<span>/Hub</span></a>
+                <button class="header-btn" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+        <div class="page-content">
+            <div class="container">
+                <h1 class="section-heading" style="border: none; margin-top: 0;">Python Basics: Variables & Data Types</h1>
+                <div class="video-player-container">
+                    <iframe src="https://www.youtube.com/embed/kqtD5dpn9C8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="info-container">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="desc-tab">Description</button>
+                        <button class="tab-btn" data-tab="downloads-tab">Downloads</button>
+                        <button class="tab-btn" data-tab="notes-tab">Notes</button>
+                    </div>
+                    <div id="desc-tab" class="tab-content active"><p>This video covers the fundamentals of Python variables and the core data types: strings, integers, and floats. Understanding these concepts is the first and most crucial step in your programming journey.</p></div>
+                    <div id="downloads-tab" class="tab-content"><ul class="download-list"><li><a href="#" download><i class="fas fa-file-pdf"></i> Lecture 1 Slides.pdf</a></li><li><a href="#" download><i class="fas fa-file-code"></i> Source Code.zip</a></li></ul></div>
+                    <div id="notes-tab" class="tab-content"><h3>My Personal Notes</h3><p style="font-size:0.9rem; color: var(--scaler-text-light);">Your notes are saved automatically in your browser.</p><textarea id="notes-textarea" placeholder="Start typing..."></textarea><div id="save-status"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Firebase SDK Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+       const firebaseConfig = {
+            apiKey: "AIzaSyDSapc498-GErIIKRcOss5bTJwn0kCPS8g",
+            authDomain: "elearning-92515.firebaseapp.com",
+            projectId: "elearning-92515",
+            storageBucket: "elearning-92515.appspot.com",
+            messagingSenderId: "546172404816",
+            appId: "1:546172404816:web:cd6aa52f94671eb7d47d55",
+            measurementId: "G-0VZPB6BWYQ"
+        };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // --- CORE APP LOGIC ---
+
+        const allPages = document.querySelectorAll('.page');
+
+        // 1. Navigation Logic
+        function navigateTo(pageId) {
+            allPages.forEach(page => {
+                page.classList.remove('active');
+            });
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo(0, 0); // Scroll to top on page change
+            }
+        }
+
+        // Add event listeners for all navigation buttons
+        document.querySelectorAll('[data-navigate]').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                navigateTo(button.dataset.navigate);
+            });
+        });
+
+        // 2. Authentication Flow
+        function checkAuthAndNavigate() {
+            const user = auth.currentUser;
+            if (user) {
+                navigateTo('video-content-page');
+            } else {
+                navigateTo('login-page');
+            }
+        }
+
+        document.getElementById('startLearningBtn').addEventListener('click', checkAuthAndNavigate);
+        document.getElementById('startLearningSidebarBtn').addEventListener('click', checkAuthAndNavigate);
+
+        // 3. Login Page Logic
+        const signInBtn = document.getElementById('signin-btn');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const message = document.getElementById('message');
+        const btnText = document.getElementById('btn-text');
+        const loadingSpinner = document.getElementById('loading');
+
+        signInBtn.addEventListener('click', () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            if (!email || !password) {
+                message.textContent = "Please fill in all fields.";
+                message.className = "message error";
+                return;
+            }
+            message.textContent = "";
+            btnText.style.display = 'none';
+            loadingSpinner.style.display = 'inline-block';
+            signInBtn.disabled = true;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then(userCredential => {
+                    // Success! onAuthStateChanged will handle navigation.
+                })
+                .catch(error => {
+                    message.textContent = "Login Failed. Please check your credentials.";
+                    message.className = "message error";
+                    btnText.style.display = 'inline-block';
+                    loadingSpinner.style.display = 'none';
+                    signInBtn.disabled = false;
+                });
+        });
+        
+        // 4. Logout Logic
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                navigateTo('course-details-page');
+                alert('You have been logged out.');
+            });
+        });
+        
+        // 5. Central Auth State Listener
+        onAuthStateChanged(auth, user => {
+            const currentPage = document.querySelector('.page.active').id;
+            if (user) {
+                // If user is logged in and on the login page, move them to videos.
+                if (currentPage === 'login-page') {
+                    navigateTo('video-content-page');
+                }
+            } else {
+                // If user is not logged in and trying to access videos, send them to login.
+                if (currentPage === 'video-content-page') {
+                    navigateTo('login-page');
+                }
+            }
+        });
+
+        // --- UI LOGIC ---
+
+        // Accordion
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                content.classList.toggle('active');
+                header.querySelector('i').classList.toggle('fa-chevron-up');
+            });
+        });
+
+        // Video Page Tabs
+        const tabButtons = document.querySelectorAll('#video-content-page .tab-btn');
+        const tabContents = document.querySelectorAll('#video-content-page .tab-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Notes with Local Storage
+        const notesTextarea = document.getElementById('notes-textarea');
+        const saveStatus = document.getElementById('save-status');
+        const notesKey = 'pythonCourseNotes';
+        let saveTimeout;
+
+        if (localStorage.getItem(notesKey)) {
+            notesTextarea.value = localStorage.getItem(notesKey);
+        }
+        
+        notesTextarea.addEventListener('input', () => {
+            clearTimeout(saveTimeout);
+            saveStatus.textContent = 'Saving...';
+            saveTimeout = setTimeout(() => {
+                localStorage.setItem(notesKey, notesTextarea.value);
+                saveStatus.textContent = 'Notes saved automatically.';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
